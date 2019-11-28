@@ -18,7 +18,7 @@ router.post('/add-student', cors(), [
         .not().isEmpty().withMessage('username is required.'),
     authMiddleware.veryfiToken,
     authMiddleware.veryfiAdmin,
-    authMiddleware.checkExistingUsername
+    authMiddleware.checkUsedUsername
 ],
     adminController.addStudent);
 
@@ -42,8 +42,18 @@ router.post('/add-classroom', cors(), [
 // ],
 //     adminController.updateClassroom);
 
-// router.delete('/remove-classroom/:classroomId', cors(), [
-//     authMiddleware.veryfiToken],
-//     adminController.removeClassroom);
+router.delete('/remove-user/:userId', cors(), [
+    authMiddleware.veryfiToken,
+    authMiddleware.veryfiAdmin,
+    authMiddleware.checkExistingUsername
+],
+    adminController.removeUser);
+
+router.delete('/remove-classroom/:classroomId', cors(), [
+    authMiddleware.veryfiToken,
+    authMiddleware.veryfiAdmin,
+    authMiddleware.checkExistingClassroom
+],
+    adminController.removeClassroom);
 
 module.exports = router;

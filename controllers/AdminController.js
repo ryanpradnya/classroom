@@ -129,7 +129,6 @@ exports.updateClassroom = async (req, res, next) => {
 exports.removeClassroom = async (req, res, next) => {
     const errors = validationResult(req);
 
-    const classroomId = req.params['classroomId'];
     try {
         if (!errors.isEmpty()) {
             const error = new Error('Validation failed.');
@@ -137,13 +136,37 @@ exports.removeClassroom = async (req, res, next) => {
             error.data = errors.array();
             throw error;
         }
-        const deletedClassroom = await Classroom.findOne({ where: { id: classroomId } });
 
         await Classroom.destroy({
-            where: { id: classroomId }
+            where: { id: req.classroom.id }
         });
 
-        res.status(201).json({ message: 'Classroom deleted successfully', deletedClassroom: deletedClassroom });
+        res.status(201).json({ message: 'Classroom deleted successfully', deletedClassroom: req.classroom });
+
+    } catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    }
+};
+
+exports.removeUser = async (req, res, next) => {
+    const errors = validationResult(req);
+
+    try {
+        if (!errors.isEmpty()) {
+            const error = new Error('Validation failed.');
+            error.statusCode = 422;
+            error.data = errors.array();
+            throw error;
+        }
+
+        await User.destroy({
+            where: { id: req.user.id }
+        });
+
+        res.status(201).json({ message: 'User deleted successfully', deletedUser: req.user });
 
     } catch (err) {
         if (!err.statusCode) {

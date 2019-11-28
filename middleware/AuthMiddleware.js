@@ -6,7 +6,7 @@ const config = require('../util/Config');
 const User = db.user;
 const Classroom = db.classroom;
 
-exports.checkExistingUsername = async (req, res, next) => {
+exports.checkUsedUsername = async (req, res, next) => {
     const username = req.body.username;
     try {
         const user = await User.findOne({ where: { username: username } })
@@ -72,17 +72,39 @@ exports.veryfiToken = (req, res, next) => {
     next();
 }
 
-exports.checkExistingTodo = async (req, res, next) => {
-    const todoId = req.params['todoId'];
+exports.checkExistingClassroom = async (req, res, next) => {
+    const classroomId = req.params['classroomId'];
     try {
-        const todo = await TodoList.findOne({ where: { id: todoId } })
-        if (!todo) {
-            const error = new Error('Todo not found!');
+        const classroom = await Classroom.findByPk(classroomId);
+
+        if (!classroom) {
+            const error = new Error('Classroom not found!');
             error.statusCode = 404;
             throw error;
         } else {
-            console.log('checked', todo.checked);
-            req.checked = todo.checked;
+            req.classroom = classroom;
+            next();
+        }
+    } catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    }
+
+};
+
+exports.checkExistingUsername = async (req, res, next) => {
+    const userId = req.params['userId'];
+    try {
+        const user = await User.findByPk(userId);
+
+        if (!user) {
+            const error = new Error('User not found!');
+            error.statusCode = 404;
+            throw error;
+        } else {
+            req.user = user;
             next();
         }
     } catch (err) {
