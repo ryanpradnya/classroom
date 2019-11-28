@@ -26,6 +26,26 @@ exports.checkExistingEmail = async (req, res, next) => {
 
 };
 
+exports.veryfiAdmin = async (req, res, next) => {
+    try {
+        const user = await User.findByPk(req.userId);
+        if (user.isAdmin == false) {
+            const error = new Error('Not admin.');
+            error.statusCode = 401;
+            throw error;
+        } else {
+            next();
+        }
+    } catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    }
+
+
+}
+
 exports.veryfiToken = (req, res, next) => {
     let authHeader = req.get('Authorization');
 

@@ -1,4 +1,5 @@
-const { validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
 
 const db = require('../util/Database');
 
@@ -35,7 +36,7 @@ exports.getUsers = async (req, res, next) => {
 
 };
 
-exports.addUser = async (req, res, next) => {
+exports.addStudent = async (req, res, next) => {
     const errors = validationResult(req);
 
     const name = req.body.name;

@@ -39,7 +39,7 @@ exports.signup = async (req, res, next) => {
 exports.signin = async (req, res, next) => {
     const errors = validationResult(req);
 
-    const email = req.body.email;
+    const username = req.body.username;
     const password = req.body.password;
     try {
         if (!errors.isEmpty()) {
@@ -51,7 +51,7 @@ exports.signin = async (req, res, next) => {
 
         const user = await User.findOne({
             where: {
-                email: email
+                username: username
             }
         });
 
@@ -68,7 +68,7 @@ exports.signin = async (req, res, next) => {
             throw error;
         }
 
-        let token = jwt.sign({ id: user.id, email: user.email }, config.jwtSecret, {
+        let token = jwt.sign({ id: user.id, username: user.username }, config.jwtSecret, {
             expiresIn: 86400 // expires in 24 hours
         });
 

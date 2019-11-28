@@ -9,8 +9,9 @@ const authController = require('../controllers/AuthController');
 const router = express.Router();
 
 router.post('/signup', cors(), [
-  body('email')
-    .isEmail()
+  body('username')
+    .trim()
+    .not().isEmpty()
     .withMessage('Please enter a valid email.'),
   body('password')
     .trim()
@@ -18,8 +19,9 @@ router.post('/signup', cors(), [
   authMiddleware.checkExistingEmail], authController.signup);
 
 router.post('/signin', cors(), [
-  body('email')
-    .isEmail()
+  body('username')
+    .trim()
+    .not().isEmpty()
     .withMessage('Please enter a valid email.'),
   body('password')
     .trim()

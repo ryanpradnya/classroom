@@ -8,7 +8,7 @@ const db = require('./util/Database');
 //Routes
 const authRoute = require('./routes/AuthRoute');
 // const userRoute = require('./routes/UserRoute');
-// const adminRoute = require('./routes/AdminRoute');
+const adminRoute = require('./routes/AdminRoute');
 
 const initialize = require('./controllers/InitializeController');
 const app = express();
@@ -26,7 +26,7 @@ app.use((req, res, next) => {
 
 app.use('/api/auth', authRoute);
 // app.use('/api/user', userRoute);
-// app.use('/api/admin', adminRoute);
+app.use('/api/admin', adminRoute);
 
 //Error Handling
 app.use((error, req, res, next) => {

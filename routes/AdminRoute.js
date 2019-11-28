@@ -9,13 +9,17 @@ const router = express.Router();
 
 router.get('/userlist', cors(), authMiddleware.veryfiToken, adminController.getUsers);
 
-router.post('/add-user', cors(), [
-    body('title')
+router.post('/add-student', cors(), [
+    body('username')
         .trim()
-        .not().isEmpty().withMessage('Title is required.'),
-    authMiddleware.veryfiToken
+        .not().isEmpty().withMessage('username is required.'),
+    body('password')
+        .trim()
+        .not().isEmpty().withMessage('username is required.'),
+    authMiddleware.veryfiToken,
+    authMiddleware.veryfiAdmin
 ],
-    adminController.addUser);
+    adminController.addStudent);
 
 router.put('/edit-classroom/:classroomId', cors(), [
     param('todoId')
