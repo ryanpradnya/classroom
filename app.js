@@ -1,14 +1,16 @@
 //Packages
 const express = require('express');
 const bodyParser = require('body-parser');
+const bcrypt = require('bcryptjs');
 
 const db = require('./util/Database');
 
 //Routes
 const authRoute = require('./routes/AuthRoute');
-const userRoute = require('./routes/UserRoute');
-const adminRoute = require('./routes/AdminRoute');
+// const userRoute = require('./routes/UserRoute');
+// const adminRoute = require('./routes/AdminRoute');
 
+const initialize = require('./controllers/InitializeController');
 const app = express();
 
 app.use(bodyParser.json())
@@ -23,8 +25,8 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/auth', authRoute);
-app.use('/api/user', userRoute);
-app.use('/api/admin', adminRoute);
+// app.use('/api/user', userRoute);
+// app.use('/api/admin', adminRoute);
 
 //Error Handling
 app.use((error, req, res, next) => {
@@ -38,7 +40,7 @@ db.sequelize
     .sync()
     .then(result => {
         console.log("CONNECTED");
-        app.listen(8080);
+        app.listen(8080, initialize.initializeAdmin);
     })
     .catch(err => {
         console.log(err)

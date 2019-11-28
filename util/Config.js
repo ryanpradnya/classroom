@@ -4,7 +4,7 @@ const config = {
     password: '',
     host: 'localhost',
     dialect: 'mysql',
-    jwtSecret: 'very-super-secret-key-for-todo-app'
+    jwtSecret: 'very-super-secret-key-for-classroom-app'
 };
 
 module.exports = config;

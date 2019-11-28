@@ -15,8 +15,8 @@ db.sequelize = sequelize;
 db.user = require('../models/User')(sequelize, Sequelize);
 db.classroom = require('../models/Classroom')(sequelize, Sequelize);
 
-db.classroom.belongsTo(db.user, { constraints: true, onDelete: 'CASCADE' });
-db.user.hasMany(db.classroom);
+db.user.belongsTo(db.classroom, { constraints: true, onDelete: 'CASCADE' });
+db.classroom.hasMany(db.user);
 
 module.exports = db;
 
