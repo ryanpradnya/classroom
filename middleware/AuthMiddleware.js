@@ -6,12 +6,12 @@ const config = require('../util/Config');
 const User = db.user;
 const Classroom = db.classroom;
 
-exports.checkExistingEmail = async (req, res, next) => {
-    const email = req.body.email;
+exports.checkExistingUsername = async (req, res, next) => {
+    const username = req.body.username;
     try {
-        const user = await User.findOne({ where: { email: email } })
+        const user = await User.findOne({ where: { username: username } })
         if (user) {
-            const error = new Error('Email is already in use!');
+            const error = new Error('Username is already in use!');
             error.statusCode = 400;
             throw error;
         } else {

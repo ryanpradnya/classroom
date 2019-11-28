@@ -7,7 +7,7 @@ const authMiddleware = require('../middleware/AuthMiddleware');
 
 const router = express.Router();
 
-router.get('/userlist', cors(), authMiddleware.veryfiToken, adminController.getUsers);
+// router.get('/userlist', cors(), authMiddleware.veryfiToken, adminController.getUsers);
 
 router.post('/add-student', cors(), [
     body('username')
@@ -17,23 +17,33 @@ router.post('/add-student', cors(), [
         .trim()
         .not().isEmpty().withMessage('username is required.'),
     authMiddleware.veryfiToken,
-    authMiddleware.veryfiAdmin
+    authMiddleware.veryfiAdmin,
+    authMiddleware.checkExistingUsername
 ],
     adminController.addStudent);
 
-router.put('/edit-classroom/:classroomId', cors(), [
-    param('todoId')
-        .exists()
-        .withMessage('todoId is required.'),
-    body('title')
+router.post('/add-classroom', cors(), [
+    body('name')
         .trim()
-        .not().isEmpty().withMessage('Title is required.'),
-    authMiddleware.veryfiToken
+        .not().isEmpty().withMessage('username is required.'),
+    authMiddleware.veryfiToken,
+    authMiddleware.veryfiAdmin
 ],
-    adminController.updateClassroom);
+    adminController.addClassroom);
 
-router.delete('/remove-classroom/:classroomId', cors(), [
-    authMiddleware.veryfiToken],
-    adminController.removeClassroom);
+// router.put('/edit-classroom/:classroomId', cors(), [
+//     param('todoId')
+//         .exists()
+//         .withMessage('todoId is required.'),
+//     body('title')
+//         .trim()
+//         .not().isEmpty().withMessage('Title is required.'),
+//     authMiddleware.veryfiToken
+// ],
+//     adminController.updateClassroom);
+
+// router.delete('/remove-classroom/:classroomId', cors(), [
+//     authMiddleware.veryfiToken],
+//     adminController.removeClassroom);
 
 module.exports = router;

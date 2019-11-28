@@ -69,6 +69,33 @@ exports.addStudent = async (req, res, next) => {
     }
 };
 
+exports.addClassroom = async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const name = req.body.name;
+    try {
+        if (!errors.isEmpty()) {
+            const error = new Error('Validation failed.');
+            error.statusCode = 422;
+            error.data = errors.array();
+            throw error;
+        }
+        const result = await Classroom.create({
+            name: name,
+        });
+
+        const classroom = await Classroom.findOne({ where: { id: result.id } });
+
+        res.status(201).json({ message: 'User created!', classroom: classroom });
+
+    } catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    }
+};
+
 exports.updateClassroom = async (req, res, next) => {
     const errors = validationResult(req);
 

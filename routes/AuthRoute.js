@@ -16,7 +16,7 @@ router.post('/signup', cors(), [
   body('password')
     .trim()
     .isLength({ min: 5 }).withMessage('Password length min 5 character.'),
-  authMiddleware.checkExistingEmail], authController.signup);
+  authMiddleware.checkExistingUsername], authController.signup);
 
 router.post('/signin', cors(), [
   body('username')
