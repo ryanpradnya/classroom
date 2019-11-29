@@ -31,16 +31,18 @@ router.post('/add-classroom', cors(), [
 ],
     adminController.addClassroom);
 
-// router.put('/edit-classroom/:classroomId', cors(), [
-//     param('todoId')
-//         .exists()
-//         .withMessage('todoId is required.'),
-//     body('title')
-//         .trim()
-//         .not().isEmpty().withMessage('Title is required.'),
-//     authMiddleware.veryfiToken
-// ],
-//     adminController.updateClassroom);
+router.put('/edit-classroom/:classroomId', cors(), [
+    param('classroomId')
+        .exists()
+        .withMessage('classroomId is required.'),
+    body('name')
+        .trim()
+        .not().isEmpty().withMessage('Name is required.'),
+    authMiddleware.veryfiToken,
+    authMiddleware.veryfiAdmin,
+    authMiddleware.checkExistingClassroom
+],
+    adminController.updateClassroom);
 
 router.delete('/remove-user/:userId', cors(), [
     authMiddleware.veryfiToken,

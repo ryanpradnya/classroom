@@ -86,7 +86,7 @@ exports.addClassroom = async (req, res, next) => {
 
         const classroom = await Classroom.findOne({ where: { id: result.id } });
 
-        res.status(201).json({ message: 'User created!', classroom: classroom });
+        res.status(201).json({ message: 'Classroom created!', classroom: classroom });
 
     } catch (err) {
         if (!err.statusCode) {
@@ -99,7 +99,6 @@ exports.addClassroom = async (req, res, next) => {
 exports.updateClassroom = async (req, res, next) => {
     const errors = validationResult(req);
 
-    const classroomId = req.params['classroomId'];
     const name = req.body.name;
     try {
         if (!errors.isEmpty()) {
@@ -112,9 +111,9 @@ exports.updateClassroom = async (req, res, next) => {
         await Classroom.update({
             name: name
         }, {
-            where: { id: classroomId }
+            where: { id: req.classroom.id }
         });
-        const updatedClassroom = await Classroom.findOne({ where: { id: classroomId } });
+        const updatedClassroom = await Classroom.findByPk(req.classroom.id);
 
         res.status(201).json({ message: 'Classroom updated!', classroom: updatedClassroom });
 
