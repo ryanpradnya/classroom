@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { body, param } = require('express-validator/check');
+const { body, param } = require('express-validator');
 
 const adminController = require('../controllers/AdminController');
 const authMiddleware = require('../middleware/AuthMiddleware');
