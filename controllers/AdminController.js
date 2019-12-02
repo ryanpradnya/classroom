@@ -125,6 +125,54 @@ exports.updateClassroom = async (req, res, next) => {
     }
 };
 
+exports.updateUser = async (req, res, next) => {
+    const errors = validationResult(req);
+
+    let name = req.body.name;
+    let username = req.body.username;
+    let password = req.body.password;
+    let classroomId = req.body.classroomId;
+    try {
+        if (!errors.isEmpty()) {
+            const error = new Error('Validation failed.');
+            error.statusCode = 422;
+            error.data = errors.array();
+            throw error;
+        }
+        if (!name) {
+            name = req.user.name;
+        }
+        if (!username) {
+            username = req.user.username;
+        }
+        if (!password) {
+            password = req.user.password;
+            const hashedPw = await bcrypt.hashSync(password, 12);
+        }
+        if (!classroomId) {
+            classroomId = req.user.classroomId;
+        }
+
+        await User.update({
+            name: name,
+            username: username,
+            password: hashedPw,
+            classroomId: classroomId
+        }, {
+            where: { id: req.user.id }
+        });
+        const updatedUser = await User.findByPk(req.user.id);
+
+        res.status(201).json({ message: 'User updated!', user: updatedUser });
+
+    } catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    }
+};
+
 exports.removeClassroom = async (req, res, next) => {
     const errors = validationResult(req);
 

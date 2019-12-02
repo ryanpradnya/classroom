@@ -58,4 +58,14 @@ router.delete('/remove-classroom/:classroomId', cors(), [
 ],
     adminController.removeClassroom);
 
+router.put('/edit-user/:userId', cors(), [
+    param('userId')
+        .exists()
+        .withMessage('classroomId is required.'),
+    authMiddleware.veryfiToken,
+    authMiddleware.veryfiAdmin,
+    authMiddleware.checkExistingUsername
+],
+    adminController.updateUser);
+
 module.exports = router;
