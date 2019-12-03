@@ -52,6 +52,7 @@ exports.veryfiStudent = async (req, res, next) => {
             error.statusCode = 401;
             throw error;
         } else {
+            req.user = user;
             next();
         }
     } catch (err) {
