@@ -132,6 +132,7 @@ exports.updateUser = async (req, res, next) => {
     let username = req.body.username;
     let password = req.body.password;
     let classroomId = req.body.classroomId;
+    let hashedPw;
     try {
         if (!errors.isEmpty()) {
             const error = new Error('Validation failed.');
@@ -139,6 +140,19 @@ exports.updateUser = async (req, res, next) => {
             error.data = errors.array();
             throw error;
         }
+
+        if (!classroomId) {
+            classroomId = req.user.classroomId;
+        } else {
+            const classroom = await Classroom.findByPk(classroomId);
+
+            if (!classroom) {
+                const error = new Error('Classroom not found!');
+                error.statusCode = 404;
+                throw error;
+            }
+        }
+
         if (!name) {
             name = req.user.name;
         }
@@ -146,12 +160,12 @@ exports.updateUser = async (req, res, next) => {
             username = req.user.username;
         }
         if (!password) {
-            password = req.user.password;
-            const hashedPw = await bcrypt.hashSync(password, 12);
+            hashedPw = req.user.password;
+
+        } else {
+            hashedPw = await bcrypt.hashSync(password, 12);
         }
-        if (!classroomId) {
-            classroomId = req.user.classroomId;
-        }
+
 
         await User.update({
             name: name,
